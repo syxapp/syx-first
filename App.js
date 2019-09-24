@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { StyleSheet, Text, View,Button,TextInput } from 'react-native';
+import { StyleSheet, Text, View,Button,TextInput ,ScrollView, FlatList} from 'react-native';
 
 export default function App() {
   const [outputText, setOutputText]= useState("düşmeemmeme");
@@ -12,13 +12,12 @@ setEnteredGoal(enteredText);
 
 }
 
-const addGoalHandler = ()=>
-{
-
-  console.log(enteredGoal)
-  setCourseGoals(currentGoals=>[...courseGoals,enteredGoal]);
-}
-
+const addGoalHandler = () => {
+  setCourseGoals(currentGoals => [
+    ...currentGoals,
+    { id: Math.random().toString(), value: enteredGoal }
+  ]);
+};
 
   return (
     <View style={styles.screen}>
@@ -42,11 +41,23 @@ onPress={addGoalHandler}
       <Button title = "bas bas bas 24" onPress={()=>setOutputText("bastuj vala") }></Button>
       </View>
 
-<View>
+{/* <ScrollView>
 
-{courseGoals.map((goal)=><Text>{goal}</Text>)}
+{courseGoals.map((goal)=><Text style={styles.listItem} key={goal}>{goal}</Text>)}
 
+</ScrollView> */}
+
+<FlatList
+keyExtractor={(item,index)=>item.id}
+data={courseGoals}
+renderItem = {itemData=>(
+<View >
+<Text  style={styles.listItem}  >{itemData.item.value}</Text>
 </View>
+)} 
+
+
+/>
 
 
     </View>
@@ -56,7 +67,15 @@ onPress={addGoalHandler}
 const styles = StyleSheet.create({
 
 screen:{padding:100},
-inputContainer:{flexDirection:"row", justifyContent:'space-between',alignItems:'center'}
+inputContainer:{flexDirection:"row", justifyContent:'space-between',alignItems:'center'},
+
+listItem:{padding:10,
+backgroundColor:'blue',
+borderColor:'black',
+borderWidth:1,
+color:'white',
+marginVertical:5
+}
 
 
 
